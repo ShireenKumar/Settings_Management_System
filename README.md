@@ -15,5 +15,7 @@ A full-stack application for managing JSON configuration settings with CRUD oper
 - https://www.youtube.com/watch?v=_HG2eB27j00
 - https://www.atdatabases.org/docs/pg-guide-typescript
 - https://www.postgresql.org/docs/current/sql-commands.html
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
+
 
 

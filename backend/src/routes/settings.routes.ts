@@ -21,7 +21,7 @@ try{
 }
 });
 
-// put /setting to create a setting with jsons
+// put /setting/uid to edit a setting with jsons
 route.put('/:uid', async (req,res) =>{
     try{
         const { uid } = req.params;
@@ -34,7 +34,7 @@ route.put('/:uid', async (req,res) =>{
         // Call the service to edit a setting
         const setting = await settingsService.editSetting(uid, data);
 
-        res.status(201).json(setting);
+        res.status(200).json(setting);
     }catch(error){
         // Handling any errors
         console.error('Error updating setting:', error);
@@ -42,5 +42,20 @@ route.put('/:uid', async (req,res) =>{
     }
     });
     
+
+route.delete('/:uid', async (req,res) =>{
+    try{
+        const { uid } = req.params;
+        const data = req.body;
+
+        // Call the service to delete a setting
+        const setting = await settingsService.deleteSetting(uid);
+        res.status(204).json(setting);
+    }catch(error){
+        // Handling any errors
+        console.error('Error deleting setting:', error);
+        res.status(500).json({ error: 'Failed to delete setting' });
+    }
+    });
 
 export default route;
