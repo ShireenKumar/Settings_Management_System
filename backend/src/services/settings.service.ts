@@ -16,3 +16,19 @@ export const createSetting = async (given_data: any): Promise<Setting> =>{
         updated_at: result.rows[0].updated_at
       };
   };
+
+  export const editSetting = async (given_id: string, given_data: any): Promise<Setting> =>{
+    const query = `
+    UPDATE settings
+        SET json_data = $1, updated_log = NOW()
+        WHERE id = $2
+        RETURNING id, json_data, time_created as created_at, updated_log as updated_at
+    `;
+    const result = await pool.query(query, [JSON.stringify(given_data), given_id]);
+    return {
+        id: result.rows[0].id,
+        data: result.rows[0].json_data,
+        created_at: result.rows[0].created_at,
+        updated_at: result.rows[0].updated_at
+      };
+  };
