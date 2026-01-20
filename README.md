@@ -16,6 +16,12 @@ A full-stack application for managing JSON configuration settings with CRUD oper
 - https://www.atdatabases.org/docs/pg-guide-typescript
 - https://www.postgresql.org/docs/current/sql-commands.html
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status
+- https://www.geeksforgeeks.org/sql/pagination-in-sql/
 
+Design choices:
+- Why postgresSQL for database
+- Why JSONB and GIN for queries
+- Why Offset instead of Cursor for pagination logic
+- Why this specific file structure
 
 

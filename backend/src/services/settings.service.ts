@@ -34,6 +34,7 @@ export const createSetting = async (given_data: any): Promise<Setting> =>{
       };
   };
 
+  // Deletes a setting based on user id
   export const deleteSetting = async (given_id: string): Promise<Setting> =>{
     const query = `
     DELETE FROM settings 
@@ -48,3 +49,31 @@ export const createSetting = async (given_data: any): Promise<Setting> =>{
         updated_at: result.rows[0].updated_at
       };
   };
+
+// Reading all the settings (with pagination)
+export const readAllSetting = async (limit = 10, offset = 0): Promise<{setting_list: Setting[]; total: number}> => {
+    
+    // Grab the total amount of settings to help with pagination later on
+    const countQuery = `
+        SELECT COUNT(*) 
+        FROM settings`;
+    const countResult = await pool.query(countQuery);
+    const total = parseInt(countResult.rows[0].count);
+    
+    // Get the settings with the set limit and offset for pagination
+    const query = `
+        SELECT 
+            id, 
+            json_data as data,    
+            time_created as created_at,
+            updated_log as updated_at  
+        FROM settings
+        ORDER BY time_created DESC
+        LIMIT $1 
+        OFFSET $2
+    `;
+    const result = await pool.query(query, [limit, offset]);
+    const setting_list: Setting[] = result.rows;
+    
+    return {setting_list, total};
+}

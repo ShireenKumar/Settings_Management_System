@@ -58,4 +58,27 @@ route.delete('/:uid', async (req,res) =>{
     }
     });
 
+route.get('/', async(req, res) => {
+    try{
+        const limit = parseInt(req.query.limit as string) || 10;
+        const offset = parseInt(req.query.offset as string) || 0
+        // Call the service to read the settings
+        const { setting_list, total } = await settingsService.readAllSetting(limit, offset);
+        
+        // Adding pagination settings
+        res.status(200).json({
+            setting_list,
+            pagination: {
+                total,
+                limit,
+                offset,
+            }
+        });
+    }catch(error){
+        // Handling any errors
+        console.error('Error reading settings:', error);
+        res.status(500).json({ error: 'Failed to read settings' });
+    }
+});
+
 export default route;
