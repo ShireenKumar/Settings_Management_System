@@ -77,3 +77,25 @@ export const readAllSetting = async (limit = 10, offset = 0): Promise<{setting_l
     
     return {setting_list, total};
 }
+
+// Reading one of the settings based on the uid
+export const readOneSetting = async (given_id: String): Promise<Setting> => {
+    
+    // Get the settings with the set limit and offset for pagination
+    const query = `
+        SELECT 
+            id, 
+            json_data,    
+            time_created,
+            updated_log 
+        FROM settings
+        WHERE id = $1
+    `;
+    const result = await pool.query(query, [given_id]);
+    return {
+        id: result.rows[0].id,
+        data: result.rows[0].json_data,
+        created_at: result.rows[0].created_at,
+        updated_at: result.rows[0].updated_at
+      };
+}

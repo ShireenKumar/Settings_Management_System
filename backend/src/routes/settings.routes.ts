@@ -38,11 +38,11 @@ route.put('/:uid', async (req,res) =>{
     }catch(error){
         // Handling any errors
         console.error('Error updating setting:', error);
-        res.status(500).json({ error: 'Failed to update setting' });
+        res.status(404).json({ error: 'Failed to update setting' });
     }
     });
     
-
+// get /setting/uid to read one setting
 route.delete('/:uid', async (req,res) =>{
     try{
         const { uid } = req.params;
@@ -58,6 +58,7 @@ route.delete('/:uid', async (req,res) =>{
     }
     });
 
+// get /setting to read all settings
 route.get('/', async(req, res) => {
     try{
         const limit = parseInt(req.query.limit as string) || 10;
@@ -80,5 +81,20 @@ route.get('/', async(req, res) => {
         res.status(500).json({ error: 'Failed to read settings' });
     }
 });
+
+// get /setting/uid to read one setting
+route.get('/:uid', async (req,res) =>{
+    try{
+        const { uid } = req.params;
+        // Call the service to edit a setting
+        const setting = await settingsService.readOneSetting(uid);
+
+        res.status(200).json(setting);
+    }catch(error){
+        // Handling any errors
+        console.error('Error reading one setting:', error);
+        res.status(404).json({ error: 'Failed to read one setting' });
+    }
+    });
 
 export default route;
