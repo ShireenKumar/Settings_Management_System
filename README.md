@@ -72,6 +72,8 @@ To customize database credentials or other settings:
 
    Ensure `frontend/src/service/api.ts` points at your backend URL (default `http://localhost:3000`).
 
+## Demo/How to test:
+https://youtu.be/BwyhyPMjqaw
 
 ## API Reference
 
