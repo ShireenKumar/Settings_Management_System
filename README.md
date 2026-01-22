@@ -32,8 +32,6 @@ This starts:
 
 Open [http://localhost:5173](http://localhost:5173) in a browser to use the Settings Manager.
 
-### Run backend and frontend locally (no Docker)
-
 ## Custom Configuration (Optional)
 
 To customize database credentials or other settings:
@@ -51,6 +49,7 @@ To customize database credentials or other settings:
    NODE_ENV=development
 ```
 
+## Run backend and frontend locally (no Docker)
 
 1. **Database**: Start PostgreSQL (e.g. via Docker) and ensure a DB exists. Apply `backend/init.sql` if the `settings` table is not yet created.
 
