@@ -35,14 +35,13 @@ services:
       postgres:
         condition: service_healthy
 
-  # UNCOMMENT WHEN WORKING ON FRONTEND
-  # frontend:
-  #   build: ./frontend
-  #   container_name: settings_frontend
-  #   ports:
-  #     - "5173:5173"
-  #   depends_on:
-  #     - backend
+  frontend:
+    build: ./frontend
+    container_name: settings_frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:

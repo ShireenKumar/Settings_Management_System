@@ -1,16 +1,19 @@
+// Setting type
 export interface Setting {
-  uid: string;
-  data: any;
+  id: string;
+  data: Record<string, any>;
   created_at: string;
   updated_at: string;
 }
+// Added pagination type
+export interface PaginationInfo {
+  total: number;
+  limit: number;
+  offset: number;
+}
 
-export interface PaginatedResponse {
-  data: Setting[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+// Added Response page type with Setting and PaginationInfo
+export interface SettingsResponse {
+  setting_list: Setting[];
+  pagination: PaginationInfo;
 }
