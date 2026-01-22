@@ -95,7 +95,7 @@ export const readOneSetting = async (given_id: String): Promise<Setting> => {
     return {
         id: result.rows[0].id,
         data: result.rows[0].json_data,
-        created_at: result.rows[0].created_at,
-        updated_at: result.rows[0].updated_at
+        created_at: result.rows[0].time_created,
+        updated_at: result.rows[0].updated_log
       };
 }
