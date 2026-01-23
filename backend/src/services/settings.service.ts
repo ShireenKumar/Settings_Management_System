@@ -34,21 +34,14 @@ export const createSetting = async (given_data: any): Promise<Setting> =>{
       };
   };
 
-  // Deletes a setting based on user id
-  export const deleteSetting = async (given_id: string): Promise<Setting> =>{
+// Deletes a setting based on user id
+export const deleteSetting = async (given_id: string): Promise<void> =>{
     const query = `
     DELETE FROM settings 
         WHERE id = $1
-        RETURNING *;
     `;
-    const result = await pool.query(query, [given_id]);
-    return {
-        id: result.rows[0].id,
-        data: result.rows[0].json_data,
-        created_at: result.rows[0].created_at,
-        updated_at: result.rows[0].updated_at
-      };
-  };
+    await pool.query(query, [given_id]);
+    };
 
 // Reading all the settings (with pagination)
 export const readAllSetting = async (limit = 10, offset = 0): Promise<{setting_list: Setting[]; total: number}> => {
@@ -79,23 +72,24 @@ export const readAllSetting = async (limit = 10, offset = 0): Promise<{setting_l
 }
 
 // Reading one of the settings based on the uid
-export const readOneSetting = async (given_id: String): Promise<Setting> => {
+export const readOneSetting = async (given_id: string): Promise<Setting> => {
     
     // Get the settings with the set limit and offset for pagination
     const query = `
         SELECT 
             id, 
-            json_data,    
-            time_created,
-            updated_log 
+            json_data as data,    
+            time_created as created_at,
+            updated_log as updated_at
         FROM settings
         WHERE id = $1
     `;
     const result = await pool.query(query, [given_id]);
+    
     return {
         id: result.rows[0].id,
-        data: result.rows[0].json_data,
-        created_at: result.rows[0].time_created,
-        updated_at: result.rows[0].updated_log
+        data: result.rows[0].data,
+        created_at: result.rows[0].created_at,
+        updated_at: result.rows[0].updated_at
       };
 }

@@ -8,7 +8,7 @@ route.post('/', async (req,res) =>{
 try{
     const data = req.body;
     // Incase the request is empty
-    if (!data) {
+    if (!data || Object.keys(data).length === 0) {
         return res.status(400).json({ error: 'Cannot update with an empty request' });
       }
     // Call the service to create a setting
@@ -28,35 +28,37 @@ route.put('/:uid', async (req,res) =>{
         const data = req.body;
 
         // Incase the request is empty
-        if (!data) {
+        if (!data || Object.keys(data).length === 0) {
             return res.status(400).json({ error: 'Cannot update with an empty request' });
           }
         // Call the service to edit a setting
         const setting = await settingsService.editSetting(uid, data);
 
+        if (!setting) {
+            return res.status(404).json({ error: 'Setting not found' });
+        }
+
         res.status(200).json(setting);
     }catch(error){
         // Handling any errors
         console.error('Error updating setting:', error);
-        res.status(404).json({ error: 'Failed to update setting' });
+        res.status(500).json({ error: 'Failed to update setting' });
     }
     });
     
-// get /setting/uid to read one setting
-route.delete('/:uid', async (req,res) =>{
-    try{
-        const { uid } = req.params;
-        const data = req.body;
-
-        // Call the service to delete a setting
-        const setting = await settingsService.deleteSetting(uid);
-        res.status(204).json(setting);
-    }catch(error){
-        // Handling any errors
-        console.error('Error deleting setting:', error);
-        res.status(500).json({ error: 'Failed to delete setting' });
+// Delete /setting/uid to delete one setting
+route.delete('/:uid', async (req: Request, res: Response) => {
+    try {
+      const { uid } = req.params;
+      await settingsService.deleteSetting(uid);
+      
+      // Always return 204 - idempotent
+      res.status(204).send();
+    } catch (error) {
+      console.error('Error deleting setting:', error);
+      res.status(500).json({ error: 'Failed to delete setting' });
     }
-    });
+  });
 
 // get /setting to read all settings
 route.get('/', async(req, res) => {
@@ -89,11 +91,15 @@ route.get('/:uid', async (req,res) =>{
         // Call the service to edit a setting
         const setting = await settingsService.readOneSetting(uid);
 
+        if (!setting) {
+            return res.status(404).json({ error: 'Setting not found' });
+        }
+
         res.status(200).json(setting);
     }catch(error){
         // Handling any errors
         console.error('Error reading one setting:', error);
-        res.status(404).json({ error: 'Failed to read one setting' });
+        res.status(500).json({ error: 'Failed to read one setting' });
     }
     });
 
