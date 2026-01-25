@@ -73,7 +73,7 @@ function App() {
     }
   };
 
-  //
+  // handleing the searching
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -114,10 +114,12 @@ function App() {
     fetchSettings();
   }, [offset, limit]);
 
+  // Calculates the amount of pages using the total settings (given by the backend queries)
   const totalPages = Math.max(1, Math.ceil(total / limit));
   const currentPage = Math.floor(offset / limit) + 1;
 
-  // Modal to create a new settibg
+  // Modal to create a new setting
+
   const openCreateModal = () => {
     setJsonInput('');
     setError('');
@@ -131,17 +133,23 @@ function App() {
     setModalError('');
   };
 
+  // Handles the modal for creating a new setting 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // resets the error and makes the submitLoading to true
     setError('');
     setModalError('');
     setSubmitLoading(true);
 
     try {
+      // When the user enters the jsonInput it sets that to data
       const data = JSON.parse(jsonInput);
+      // calls the endpoint for posting a new setting
       await settingsApi.postSetting(data);
+      // calls close create modal
       closeCreateModal();
+      // then it fetches all the settings 
       fetchSettings();
 
     } catch (err: any) {
@@ -149,18 +157,23 @@ function App() {
       setModalError(msg);
 
     } finally {
+      // at the end it sets the submite loading to false as the user submits
       setSubmitLoading(false);
     }
   };
 
+  // when the user tries to edit the settings 
   const openEditModal = (s: Setting) => {
+    // set setEditingSetting with the setting that is being edited 
     setEditingSetting(s);
+    // Gets the data that is going to be edited
     setJsonInput(JSON.stringify(s.data, null, 2));
     setError('');
     setModalError('');
     setShowEditModal(true);
   };
 
+  // gets rid of everything
   const closeEditModal = () => {
     setShowEditModal(false);
     setEditingSetting(null);
@@ -168,6 +181,7 @@ function App() {
     setModalError('');
   };
 
+  // Handles the edit setting function 
   const handleEdit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingSetting) return;
@@ -177,6 +191,7 @@ function App() {
     setSubmitLoading(true);
 
     try {
+      // 
       const data = JSON.parse(jsonInput);
       await settingsApi.putSetting(editingSetting.id, data);
 
@@ -233,7 +248,7 @@ function App() {
       </header>
 
       <main className="app-main">
-        {/* Search bar – full functionality preserved */}
+        {/* Search bar */}
         <section className="search-section">
           <form onSubmit={handleSearch} className="search-form">
             <input
@@ -364,20 +379,24 @@ function App() {
               <div className="pagination">
                 <button
                   type="button"
+                  // Previous button which is the offset - limit
+                  // Math max ensures the offset is never less than 0
                   onClick={() => setOffset(Math.max(0, offset - limit))}
                   disabled={offset === 0}
                 >
                   Previous
                 </button>
-                <span className="pagination-info">
+                <span className="pagination-info"> 
                   Showing {offset + 1} to {Math.min(offset + limit, total)} of {total} settings
                 </span>
                 <div className="page-numbers">
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                     <button
+                    // Here we are creating the array of page numbers
                       key={p}
                       type="button"
                       className={currentPage === p ? 'page-btn active' : 'page-btn'}
+                      // This allows for the user to click on the page number and be taken to that page
                       onClick={() => setOffset((p - 1) * limit)}
                     >
                       {p}
@@ -386,6 +405,8 @@ function App() {
                 </div>
                 <button
                   type="button"
+                  // Going to the next page, setting offset to offset + limit 
+                  // Disable the button is its at the last page
                   onClick={() => setOffset(offset + limit)}
                   disabled={offset + limit >= total}
                 >

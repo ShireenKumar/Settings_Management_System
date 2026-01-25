@@ -63,12 +63,12 @@ route.delete('/:uid', async (req: Request, res: Response) => {
 // get /setting to read all settings
 route.get('/', async(req, res) => {
     try{
-        const limit = parseInt(req.query.limit as string) || 10;
+        const limit = parseInt(req.query.limit as string) || 10
         const offset = parseInt(req.query.offset as string) || 0
         // Call the service to read the settings
         const { setting_list, total } = await settingsService.readAllSetting(limit, offset);
         
-        // Adding pagination settings
+        // Adding pagination information in its own json object
         res.status(200).json({
             setting_list,
             pagination: {
