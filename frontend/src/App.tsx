@@ -135,6 +135,7 @@ function App() {
 
   // Handles the modal for creating a new setting 
   const handleCreate = async (e: React.FormEvent) => {
+    // Doesn't lose search upon refresh
     e.preventDefault();
 
     // resets the error and makes the submitLoading to true
