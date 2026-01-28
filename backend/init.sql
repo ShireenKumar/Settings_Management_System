@@ -11,6 +11,7 @@ settings (
 
 -- Using indexing to speed up searching/reading 
 -- Using generalized inverted index as it reads faster for a JSONB
+-- CORRECTION: This is not needed!
 CREATE INDEX IF NOT EXISTS idx_settings_data 
     ON settings 
     USING GIN (json_data);

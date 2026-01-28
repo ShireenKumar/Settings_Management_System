@@ -72,7 +72,7 @@ export const readAllSetting = async (limit = 10, offset = 0): Promise<{setting_l
 }
 
 // Reading one of the settings based on the uid
-export const readOneSetting = async (given_id: string): Promise<Setting> => {
+export const readOneSetting = async (given_id: string): Promise<Setting | null> => {
     
     // Get the settings with the set limit and offset for pagination
     const query = `
@@ -85,6 +85,11 @@ export const readOneSetting = async (given_id: string): Promise<Setting> => {
         WHERE id = $1
     `;
     const result = await pool.query(query, [given_id]);
+
+    // in the case that the 
+    if (result.rows.length === 0) {
+        return null; 
+    }
     
     return {
         id: result.rows[0].id,
