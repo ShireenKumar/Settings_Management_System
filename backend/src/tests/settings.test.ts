@@ -116,14 +116,14 @@ describe('Settings API', () => {
       (settingsService.readAllSetting as jest.Mock).mockResolvedValue(mockResponse);
 
       const response = await request(app)
-        .get('/settings?limit=10&offset=0')
+        .get('/settings?limit=5&offset=2')
         .expect(200);
 
       expect(response.body).toHaveProperty('setting_list');
       expect(response.body).toHaveProperty('pagination');
       expect(response.body.setting_list).toHaveLength(2);
       expect(response.body.pagination.total).toBe(2);
-      expect(settingsService.readAllSetting).toHaveBeenCalledWith(10, 0);
+      expect(settingsService.readAllSetting).toHaveBeenCalledWith(5, 2);
     });
 
     it('should use default pagination values when not provided', async () => {
